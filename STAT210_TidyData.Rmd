@@ -1,0 +1,87 @@
+---
+title: "Ch. 12 Data Wrangling - Tidy Data"
+author: "Jerri Schorr"
+date: 10-29-2019
+output: github_document
+---
+
+##### **Chapter 12**
+
+###### **12.1**
+
+* This chapter will teach you about the **tidy r** package
+```{r include=FALSE}
+library(tidyverse)
+```
+
+###### **12.2**
+
+* There are three interrelated rules which make a dataset tidy:
+    + Each variable must have its own column.
+    + Each observation must have its own row.
+    + Each value must have its own cell.
+    
+* 2 simple steps:
+    + Put data in a **tibble**
+    + Put variables in columns
+    
+* 2 main advantages
+    + consistent uniform data makes it easy to use tidy tools
+    + putting variables into columns means that R can treat rows of data like a vector
+
+###### **12.3**
+
+* Data in the real world is messy and needs tidying first
+    + Sometimes the variables are not in columns but **values** are in the columns
+        + You can use the **gather** function
+    + Sometimes an observation is spread accross a few rows
+        + You can use the **spread** function
+        
+```{r}
+stocks <- tibble(
+  year   = c(2015, 2015, 2016, 2016),
+  half  = c(   1,    2,     1,    2),
+  return = c(1.88, 0.59, 0.92, 0.17)
+)
+stocks %>% 
+  spread(year, return) %>% 
+  gather("year", "return", `2015`:`2016`)
+```
+
+###### **12.4**
+
+* Sometimes we need to separate or unite values within a column
+    + we can use the **seperate** or **unite** function
+    
+```{r}
+tibble(x = c("a,b,c", "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("one", "two", "three"))
+
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("one", "two", "three"))
+```
+    
+###### **12.5**
+
+* Values can be missing in 2 ways
+    + Explicity (NA)
+    + Implicitly (no data represented)
+     
+* we can use the **complete** function to fix this issue. 
+    + it will take the tibble and fill blank values with NAs
+    
+* we can use the **fill** function to replace NAs in rows with info from the row above
+
+###### **12.6**
+
+* case study 
+
+###### **12.7**
+
+* There are two main reasons to use other data structures:
+    + Alternative representations may have substantial performance or space advantages.
+    + Specialised fields have evolved their own conventions for storing data that may be quite different to the conventions of tidy data.
+
+* Either of these reasons means you’ll need something other than a tibble (or data frame).
+
+
